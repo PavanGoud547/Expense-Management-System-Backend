@@ -13,8 +13,8 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor  // generates default constructor
+@AllArgsConstructor // generates constructor with all fields
 public class User {
 
     @Id
@@ -42,30 +42,5 @@ public class User {
         this.email = email;
         this.password = password;
         this.roles = roles;
-    }
-
-    // Default constructor for Hibernate
-    public User() {
-    }
-
-    // Explicit getters for Lombok compatibility
-    public String getEmail() {
-        return email;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public Set<Role> getRoles() {
-        return roles;
     }
 }
