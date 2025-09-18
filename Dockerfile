@@ -15,11 +15,8 @@ COPY src ./src
 # Build the application
 RUN ./mvnw clean package -DskipTests
 
-# Copy the built JAR file
-COPY target/Expense-Management-backend-0.0.1-SNAPSHOT.jar app.jar
-
 # Expose the port the app runs on
 EXPOSE 8081
 
 # Run the JAR file
-ENTRYPOINT ["java","-jar","app.jar"]
+ENTRYPOINT ["java","-jar","target/Expense-Management-backend-0.0.1-SNAPSHOT.jar"]
