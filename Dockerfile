@@ -12,6 +12,9 @@ COPY pom.xml .
 # Copy the source code
 COPY src ./src
 
+# Make mvnw executable
+RUN chmod +x mvnw
+
 # Build the application
 RUN ./mvnw clean package -DskipTests
 
