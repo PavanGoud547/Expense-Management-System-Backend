@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.example.Expense.Management.backend.service.S3Service;
+
 @Service
 public class ExpenseService {
 
@@ -31,7 +33,13 @@ public class ExpenseService {
     @Autowired
     private UserRepository userRepository;
 
-    private static final String UPLOAD_DIR = "uploads/";
+    @Autowired
+    private S3Service s3Service;
+
+    // private static final String UPLOAD_DIR = "uploads/";
+
+    @org.springframework.beans.factory.annotation.Value("${app.upload.dir}")
+    private String uploadDir;
 
     public ExpenseDTO createExpense(String expenseName, BigDecimal price, LocalDate date,
                                 MultipartFile proofImage, String userEmail) throws IOException {
@@ -95,16 +103,11 @@ public class ExpenseService {
     }
 
     private String saveFile(MultipartFile file) throws IOException {
-        Path uploadPath = Paths.get(UPLOAD_DIR);
-        if (!Files.exists(uploadPath)) {
-            Files.createDirectories(uploadPath);
-        }
-
-        String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-        Path filePath = uploadPath.resolve(fileName);
-        Files.copy(file.getInputStream(), filePath);
-
-        return fileName;
+        String fileName = "invoices/" + System.currentTimeMillis() + "_" + file.getOriginalFilename();
+        byte[] fileBytes = file.getBytes();
+        String contentType = file.getContentType();
+        String s3Url = s3Service.uploadFile(fileName, fileBytes, contentType);
+        return s3Url;
     }
 
     private ExpenseDTO convertToDTO(Expense expense) {

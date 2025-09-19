@@ -12,6 +12,9 @@ COPY pom.xml .
 # Copy the source code
 COPY src ./src
 
+# Copy the uploads directory
+COPY uploads ./uploads
+
 # Make mvnw executable
 RUN chmod +x mvnw
 

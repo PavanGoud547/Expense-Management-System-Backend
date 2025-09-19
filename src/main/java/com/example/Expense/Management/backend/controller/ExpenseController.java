@@ -27,6 +27,9 @@ public class ExpenseController {
     @Autowired
     private ExpenseService expenseService;
 
+    @org.springframework.beans.factory.annotation.Value("${app.upload.dir}")
+    private String uploadDir;
+
     @PostMapping
     public ResponseEntity<ExpenseDTO> submitExpense(
             @RequestParam String expenseName,
@@ -73,27 +76,5 @@ public class ExpenseController {
         }
     }
 
-    @GetMapping("/files/{filename:.+}")
-    public ResponseEntity<Resource> getFile(@PathVariable String filename) {
-        Path filePath = Paths.get("uploads/").resolve(filename).normalize();
-        Resource resource = new FileSystemResource(filePath);
 
-        if (resource.exists() && resource.isReadable()) {
-            MediaType mediaType = MediaType.APPLICATION_OCTET_STREAM;
-            String lowerFilename = filename.toLowerCase();
-            if (lowerFilename.endsWith(".pdf")) {
-                mediaType = MediaType.APPLICATION_PDF;
-            } else if (lowerFilename.endsWith(".png")) {
-                mediaType = MediaType.IMAGE_PNG;
-            } else if (lowerFilename.endsWith(".jpg") || lowerFilename.endsWith(".jpeg")) {
-                mediaType = MediaType.IMAGE_JPEG;
-            }
-
-            return ResponseEntity.ok()
-                    .contentType(mediaType)
-                    .body(resource);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
 }

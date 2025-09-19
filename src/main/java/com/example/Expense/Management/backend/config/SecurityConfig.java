@@ -63,7 +63,7 @@ public class SecurityConfig {
 
         return http.build();
     }
-
+//                                                                   "https://expense-management-system-frontend-coral.vercel.app"
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
